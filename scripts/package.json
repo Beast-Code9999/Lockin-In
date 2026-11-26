@@ -1,0 +1,5 @@
+{
+  "//": "Scripts run directly with Node's built-in TypeScript type stripping (Node >= 23.6). ESM so .ts files can import each other with explicit extensions.",
+  "type": "module",
+  "private": true
+}

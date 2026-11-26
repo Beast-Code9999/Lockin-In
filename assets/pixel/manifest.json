@@ -1,0 +1,607 @@
+{
+  "version": 1,
+  "generatedBy": "scripts/gen-placeholder-art.ts",
+  "note": "Replace PNGs with real art (same names + @2x/@3x) and set \"custom\": true to stop the generator overwriting them.",
+  "assets": {
+    "brand/padlock": {
+      "file": "brand/padlock.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "brand",
+      "custom": false
+    },
+    "fx/glow": {
+      "file": "fx/glow.png",
+      "grid": [
+        64,
+        32
+      ],
+      "baseDp": 384,
+      "category": "fx",
+      "custom": false
+    },
+    "fx/sparkle": {
+      "file": "fx/sparkle.png",
+      "grid": [
+        8,
+        8
+      ],
+      "baseDp": 24,
+      "category": "fx",
+      "custom": false
+    },
+    "flame/tier0": {
+      "file": "flame/tier0.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 96,
+      "category": "flame",
+      "custom": false
+    },
+    "flame/tier1": {
+      "file": "flame/tier1.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 96,
+      "category": "flame",
+      "custom": false
+    },
+    "flame/tier2": {
+      "file": "flame/tier2.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 96,
+      "category": "flame",
+      "custom": false
+    },
+    "flame/tier3": {
+      "file": "flame/tier3.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 96,
+      "category": "flame",
+      "custom": false
+    },
+    "flame/tier4": {
+      "file": "flame/tier4.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 96,
+      "category": "flame",
+      "custom": false
+    },
+    "medal/1": {
+      "file": "medal/1.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 48,
+      "category": "medal",
+      "custom": false
+    },
+    "medal/2": {
+      "file": "medal/2.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 48,
+      "category": "medal",
+      "custom": false
+    },
+    "medal/3": {
+      "file": "medal/3.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 48,
+      "category": "medal",
+      "custom": false
+    },
+    "status/checked": {
+      "file": "status/checked.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "status/pending": {
+      "file": "status/pending.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "status/box": {
+      "file": "status/box.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "status/coward": {
+      "file": "status/coward.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "status/clown": {
+      "file": "status/clown.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "status/vacation": {
+      "file": "status/vacation.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "status/frozen": {
+      "file": "status/frozen.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "status",
+      "custom": false
+    },
+    "rank/rookie": {
+      "file": "rank/rookie.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 36,
+      "category": "rank",
+      "custom": false
+    },
+    "rank/grinder": {
+      "file": "rank/grinder.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 36,
+      "category": "rank",
+      "custom": false
+    },
+    "rank/locked-in": {
+      "file": "rank/locked-in.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 36,
+      "category": "rank",
+      "custom": false
+    },
+    "rank/disciplined": {
+      "file": "rank/disciplined.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 36,
+      "category": "rank",
+      "custom": false
+    },
+    "rank/monk-mode": {
+      "file": "rank/monk-mode.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 36,
+      "category": "rank",
+      "custom": false
+    },
+    "rank/final-boss": {
+      "file": "rank/final-boss.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 36,
+      "category": "rank",
+      "custom": false
+    },
+    "tab/home": {
+      "file": "tab/home.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 32,
+      "category": "tab",
+      "custom": false
+    },
+    "tab/leaderboard": {
+      "file": "tab/leaderboard.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 32,
+      "category": "tab",
+      "custom": false
+    },
+    "tab/votes": {
+      "file": "tab/votes.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 32,
+      "category": "tab",
+      "custom": false
+    },
+    "tab/history": {
+      "file": "tab/history.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 32,
+      "category": "tab",
+      "custom": false
+    },
+    "tab/profile": {
+      "file": "tab/profile.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 32,
+      "category": "tab",
+      "custom": false
+    },
+    "icon/sos": {
+      "file": "icon/sos.png",
+      "grid": [
+        16,
+        16
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "icon/coin": {
+      "file": "icon/coin.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "icon/shield": {
+      "file": "icon/shield.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "icon/hourglass": {
+      "file": "icon/hourglass.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "icon/lock": {
+      "file": "icon/lock.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "icon/bolt": {
+      "file": "icon/bolt.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "icon/star": {
+      "file": "icon/star.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
+    "box/owed": {
+      "file": "box/owed.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 192,
+      "category": "box",
+      "custom": false
+    },
+    "box/common": {
+      "file": "box/common.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 192,
+      "category": "box",
+      "custom": false
+    },
+    "box/rare": {
+      "file": "box/rare.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 192,
+      "category": "box",
+      "custom": false
+    },
+    "box/epic": {
+      "file": "box/epic.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 192,
+      "category": "box",
+      "custom": false
+    },
+    "box/legendary": {
+      "file": "box/legendary.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 192,
+      "category": "box",
+      "custom": false
+    },
+    "box/cursed": {
+      "file": "box/cursed.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 192,
+      "category": "box",
+      "custom": false
+    },
+    "avatar/rank/rookie": {
+      "file": "avatar/rank/rookie.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/rank/grinder": {
+      "file": "avatar/rank/grinder.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/rank/locked-in": {
+      "file": "avatar/rank/locked-in.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/rank/disciplined": {
+      "file": "avatar/rank/disciplined.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/rank/monk-mode": {
+      "file": "avatar/rank/monk-mode.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/rank/final-boss": {
+      "file": "avatar/rank/final-boss.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/blaze": {
+      "file": "avatar/base/blaze.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/frost": {
+      "file": "avatar/base/frost.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/volt": {
+      "file": "avatar/base/volt.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/shade": {
+      "file": "avatar/base/shade.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/sprout": {
+      "file": "avatar/base/sprout.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/nova": {
+      "file": "avatar/base/nova.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/ace": {
+      "file": "avatar/base/ace.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/base/ghost": {
+      "file": "avatar/base/ghost.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/state/clown": {
+      "file": "avatar/state/clown.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/state/chicken": {
+      "file": "avatar/state/chicken.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/state/jail": {
+      "file": "avatar/state/jail.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    },
+    "avatar/state/shield": {
+      "file": "avatar/state/shield.png",
+      "grid": [
+        24,
+        24
+      ],
+      "baseDp": 120,
+      "category": "avatar",
+      "custom": false
+    }
+  }
+}
