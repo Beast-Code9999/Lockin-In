@@ -2,6 +2,21 @@
 
 Choices made where SPEC.md was silent or ambiguous, or where a later instruction overrides it. Newest milestone on top.
 
+## M1 — Groups & check-ins
+
+- **RPCs are thin wrappers around `app.*_impl` functions.** The impls take the user ID and an injectable `p_now`, so the pgTAP tests control time and timezones. The public wrappers always pass `auth.uid()` and `now()`, so a client can never fake the clock.
+- **Errors are stable keys** (`CHECKIN_NOT_OPEN`, `UNDO_EXPIRED`, …) raised by `app.fail()`. The app maps them to friendly copy in `src/copy/en.ts` → `errors`.
+- **An honest slip can be logged any time of day.** The 5pm opening applies to *clean* check-ins only. That rule exists so a clean day covers most of the day, and making someone wait until 5pm to own up would work against honesty-first scoring.
+- **Undo is its own RPC, `undo_slip(date)`,** usable for 5 minutes. A fresh slip is deleted; a slip that replaced a clean check-in goes back to clean. `check_in` also allows slipped → clean inside the window, but the 5pm rule still applies to that path (SPEC §22.4).
+- **Yesterday's check-ins are stored with source `backfill`** automatically.
+- **Onboarding is split in two route groups:** `onboarding/` (welcome and sign-in, signed out) and `setup/` (player, clock, crew, Pact, signed in). The gate in `app/_layout.tsx` works it out from `get_home`: no crew → crew step, no Pact → Pact, otherwise into the tabs. No extra "onboarded" column is needed.
+- **First eligible date** is the Pact acceptance date in the player's timezone, so yesterday is never offered on your first day.
+- **`create_group` creates season 1** for the current month in the group's timezone (SPEC §18.1). `user_stats`, scoring and the finaliser are M2.
+- **Display and crew names** are trimmed, have repeated spaces squashed, are length-checked, and pass the forbidden-word check, since they appear on the widget.
+- **The crew strip** shows a tick for anyone who has checked in today, clean or slipped. Slips aren't hidden, but they're not called out on Home either.
+- **Profiles are readable by group members.** Private notes stay author-only, and other groups can read nothing (tested).
+- **pgTAP helpers** live in `supabase/tests/helpers.psql`, included with `\ir` inside each test's transaction.
+
 ## M0 — Foundations
 
 ### Visual direction: "Bubble Arcade" (overrides SPEC §15 palette + fonts)

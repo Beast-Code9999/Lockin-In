@@ -1,17 +1,19 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Share, StyleSheet, View } from 'react-native';
 
 import { copy } from '@/copy/en';
 import { signOut } from '@/features/auth/google';
 import { useSession } from '@/features/auth/session';
+import { useHome } from '@/features/home/useHome';
 import { useMyProfile } from '@/features/profile/useMyProfile';
 import { Avatar, BubbleButton, BubbleCard, GameText, RankBadge, Screen } from '@/ui';
 
-/** Profile (SPEC §14.5). M0: who you are + sign out. Badges and stats arrive with M2/M7. */
+/** Profile (SPEC §14.5): who you are, your crew + invite code, sign out. Badges and stats arrive with M2/M7. */
 export default function ProfileScreen() {
   const profile = useMyProfile();
   const session = useSession();
+  const home = useHome();
   const [busy, setBusy] = useState(false);
 
   return (
@@ -31,6 +33,33 @@ export default function ProfileScreen() {
           </GameText>
         </View>
       </BubbleCard>
+
+      {home.data?.group ? (
+        <BubbleCard tone="glow" contentStyle={styles.crew}>
+          <GameText variant="caption" tone="muted" uppercase align="center" style={styles.stretch}>
+            {copy.profile.crew}
+          </GameText>
+          <GameText variant="heading" align="center" style={styles.stretch}>
+            {home.data.group.name}
+          </GameText>
+          <GameText variant="caption" tone="faint" uppercase align="center" style={styles.stretch}>
+            {copy.profile.inviteCode}
+          </GameText>
+          <GameText variant="title" tone="aqua" align="center" selectable style={[styles.stretch, styles.code]}>
+            {home.data.group.invite_code}
+          </GameText>
+          <BubbleButton
+            label={copy.profile.share}
+            variant="secondary"
+            size="sm"
+            style={styles.center}
+            onPress={() => {
+              const code = home.data?.group?.invite_code;
+              if (code) void Share.share({ message: copy.setup.crew.shareMessage(code) });
+            }}
+          />
+        </BubbleCard>
+      ) : null}
 
       <BubbleButton
         label={copy.profile.signOut}
@@ -53,4 +82,7 @@ const styles = StyleSheet.create({
   center: { alignSelf: 'center' },
   // Full width so single-line centred text isn't mis-measured and clipped on Android.
   meta: { alignSelf: 'stretch', marginTop: 6, gap: 2 },
+  crew: { alignItems: 'center', gap: 6 },
+  stretch: { alignSelf: 'stretch' },
+  code: { letterSpacing: 6 },
 });

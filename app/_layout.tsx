@@ -7,9 +7,13 @@ import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { copy } from '@/copy/en';
 import { initAuthListener, useAuthStore } from '@/features/auth/session';
+import { onboardingStage } from '@/features/home/types';
+import { useHome } from '@/features/home/useHome';
 import { queryClient, wireQueryFocus } from '@/lib/queryClient';
 import { startSupabaseAutoRefresh } from '@/lib/supabase';
+import { BubbleButton, EmptyState, Screen } from '@/ui';
 import { FONT_SOURCES } from '@/ui/fonts';
 import { colours } from '@/ui/theme';
 
@@ -17,39 +21,69 @@ void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts(FONT_SOURCES);
-  const status = useAuthStore((s) => s.status);
-
   useEffect(() => initAuthListener(), []);
   useEffect(() => startSupabaseAutoRefresh(), []);
   useEffect(() => wireQueryFocus(), []);
-
-  const ready = (fontsLoaded || fontError !== null) && status !== 'loading';
-  useEffect(() => {
-    if (ready) void SplashScreen.hideAsync().catch(() => undefined);
-  }, [ready]);
-
-  if (!ready) return null;
-  const signedIn = status === 'signedIn';
 
   return (
     <GestureHandlerRootView style={styles.root}>
       <QueryClientProvider client={queryClient}>
         <StatusBar style="light" />
-        <Stack screenOptions={{ headerShown: false, contentStyle: styles.root, animation: 'fade' }}>
-          {/* Explicit redirects: without them the router falls back to the first available
-              route alphabetically, which would be dev/ui-kit in dev builds. */}
-          <Stack.Protected guard={signedIn} redirectTo="/onboarding">
-            <Stack.Screen name="(tabs)" />
-          </Stack.Protected>
-          <Stack.Protected guard={!signedIn} redirectTo="/">
-            <Stack.Screen name="onboarding" />
-          </Stack.Protected>
-          <Stack.Protected guard={__DEV__}>
-            <Stack.Screen name="dev/ui-kit" options={{ animation: 'slide_from_bottom' }} />
-          </Stack.Protected>
-        </Stack>
+        {fontsLoaded || fontError ? <RootNavigator /> : null}
       </QueryClientProvider>
     </GestureHandlerRootView>
+  );
+}
+
+/**
+ * Routing gate:
+ *   signed out                      → onboarding (welcome, sign-in)
+ *   signed in, no crew / no Pact    → setup (profile, clock, crew, Pact)
+ *   signed in and in the game       → (tabs)
+ */
+function RootNavigator() {
+  const status = useAuthStore((s) => s.status);
+  const signedIn = status === 'signedIn';
+  const home = useHome();
+  const stage = home.data ? onboardingStage(home.data) : null;
+
+  const ready = status !== 'loading' && (!signedIn || home.data !== undefined || home.isError);
+  useEffect(() => {
+    if (ready) void SplashScreen.hideAsync().catch(() => undefined);
+  }, [ready]);
+  if (!ready) return null;
+
+  if (signedIn && !home.data) {
+    return (
+      <Screen>
+        <EmptyState
+          icon="status/pending"
+          title={copy.home.loadError}
+          body={copy.errors.NETWORK}
+          action={<BubbleButton label={copy.home.retry} onPress={() => void home.refetch()} />}
+        />
+      </Screen>
+    );
+  }
+
+  const inGame = signedIn && stage === 'done';
+  return (
+    <Stack screenOptions={{ headerShown: false, contentStyle: styles.root, animation: 'fade' }}>
+      {/* Explicit redirects: without them the router falls back to the first available
+          route alphabetically, which would be dev/ui-kit in dev builds. */}
+      <Stack.Protected guard={inGame} redirectTo={signedIn ? '/setup' : '/onboarding'}>
+        <Stack.Screen name="(tabs)" />
+      </Stack.Protected>
+      <Stack.Protected guard={signedIn && !inGame} redirectTo={signedIn ? '/' : '/onboarding'}>
+        <Stack.Screen name="setup" />
+      </Stack.Protected>
+      <Stack.Protected guard={!signedIn} redirectTo="/">
+        <Stack.Screen name="onboarding" />
+      </Stack.Protected>
+      <Stack.Protected guard={__DEV__}>
+        <Stack.Screen name="dev/ui-kit" options={{ animation: 'slide_from_bottom' }} />
+      </Stack.Protected>
+    </Stack>
   );
 }
 

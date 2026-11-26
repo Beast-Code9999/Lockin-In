@@ -5,7 +5,105 @@ export type Database = {
   
   "public": {
           Tables: {
-            "profiles": {
+            "checkin_notes": {
+                  Row: {
+                    "checkin_id": string,"note": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "checkin_id": string,"note": string,"user_id": string
+                  }
+                  Update: {
+                    "checkin_id"?: string,"note"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "checkin_notes_checkin_id_fkey"
+      columns: ["checkin_id"]
+isOneToOne: true
+      referencedRelation: "checkins"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "checkin_notes_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"checkins": {
+                  Row: {
+                    "created_at": string,"group_id": string,"id": string,"local_date": string,"points": number,"source": Database["public"]['Enums']["checkin_source"],"status": Database["public"]['Enums']["checkin_status"],"streak_after": number,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"group_id": string,"id"?: string,"local_date": string,"points"?: number,"source": Database["public"]['Enums']["checkin_source"],"status": Database["public"]['Enums']["checkin_status"],"streak_after"?: number,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "created_at"?: string,"group_id"?: string,"id"?: string,"local_date"?: string,"points"?: number,"source"?: Database["public"]['Enums']["checkin_source"],"status"?: Database["public"]['Enums']["checkin_status"],"streak_after"?: number,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "checkins_group_id_fkey"
+      columns: ["group_id"]
+isOneToOne: false
+      referencedRelation: "groups"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "checkins_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"group_members": {
+                  Row: {
+                    "first_eligible_date": string | null,"group_id": string,"joined_at": string,"pact_accepted_at": string | null,"role": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "first_eligible_date"?: string | null,"group_id": string,"joined_at"?: string,"pact_accepted_at"?: string | null,"role"?: string,"user_id": string
+                  }
+                  Update: {
+                    "first_eligible_date"?: string | null,"group_id"?: string,"joined_at"?: string,"pact_accepted_at"?: string | null,"role"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "group_members_group_id_fkey"
+      columns: ["group_id"]
+isOneToOne: false
+      referencedRelation: "groups"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "group_members_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"groups": {
+                  Row: {
+                    "created_at": string,"created_by": string,"id": string,"invite_code": string,"name": string,"timezone": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"created_by": string,"id"?: string,"invite_code": string,"name": string,"timezone"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"created_by"?: string,"id"?: string,"invite_code"?: string,"name"?: string,"timezone"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "groups_created_by_fkey"
+      columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"profiles": {
                   Row: {
                     "auto_use_freeze": boolean,"avatar_id": string,"created_at": string,"display_name": string,"id": string,"notify_prefs": NonNullable<Json>,"phone": string | null,"reminder_time": string,"timezone": string,"tz_changed_at": string | null
                   }
@@ -19,13 +117,53 @@ export type Database = {
                   Relationships: [
                     
                   ]
+                },"seasons": {
+                  Row: {
+                    "ends_on": string,"group_id": string,"id": string,"number": number,"results": Json | null,"starts_on": string,"status": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "ends_on": string,"group_id": string,"id"?: string,"number": number,"results"?: Json | null,"starts_on": string,"status"?: string
+                  }
+                  Update: {
+                    "ends_on"?: string,"group_id"?: string,"id"?: string,"number"?: number,"results"?: Json | null,"starts_on"?: string,"status"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "seasons_group_id_fkey"
+      columns: ["group_id"]
+isOneToOne: false
+      referencedRelation: "groups"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
             [_ in never]: never
           }
           Functions: {
-            [_ in never]: never
+            "accept_pact":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
+"check_in":
+{ Args: { "p_local_date": string,"p_note"?: string,"p_source"?: Database["public"]['Enums']["checkin_source"],"p_status": Database["public"]['Enums']["checkin_status"] }; Returns: Json
+                           },
+"create_group":
+{ Args: { "p_name": string,"p_timezone"?: string }; Returns: Json
+                           },
+"get_home":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
+"join_group":
+{ Args: { "p_invite_code": string }; Returns: Json
+                           },
+"undo_slip":
+{ Args: { "p_local_date": string }; Returns: Json
+                           },
+"update_profile":
+{ Args: { "p_auto_use_freeze"?: boolean,"p_avatar_id"?: string,"p_display_name"?: string,"p_phone"?: string,"p_reminder_time"?: string,"p_timezone"?: string }; Returns: Json
+                           }
           }
           Enums: {
             "box_status": "owed"|"opened"|"proof_submitted"|"confirmed"|"failed","checkin_source": "app"|"widget"|"backfill"|"system","checkin_status": "clean"|"relapse"|"missed"|"frozen"|"vacation","loot_status": "pending"|"approved"|"rejected","post_type": "story"|"feed"|"profile_pic","rarity": "common"|"rare"|"epic"|"legendary","sos_outcome": "held"|"relapsed"|"abandoned","vote_kind": "confirm"|"reject"

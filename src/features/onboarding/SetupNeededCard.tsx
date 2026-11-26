@@ -13,11 +13,11 @@ export function SetupNeededCard() {
       <View style={styles.row}>
         <Sprite name="icon/hourglass" size={28} />
         <GameText variant="heading" tone="gold">
-          {copy.setup.title}
+          {copy.backendSetup.title}
         </GameText>
       </View>
       <GameText variant="small" tone="muted">
-        {copy.setup.body}
+        {copy.backendSetup.body}
       </GameText>
       {missing.map((name) => (
         <GameText key={name} variant="caption" tone="text">
