@@ -239,6 +239,16 @@ export const copy = {
     cancel: 'Cancel',
     noVacations: 'No vacations booked.',
     range: (from: string, to: string) => (from === to ? from : `${from} – ${to}`),
+    leaveTitle: 'Leave crew',
+    leaveBody: (crew: string) => `Done with ${crew}? You can start a new crew or join another with a code.`,
+    leaveButton: 'Leave crew',
+    leaveConfirmTitle: (crew: string) => `Leave ${crew}?`,
+    leaveConfirmBody: (lastOne: boolean) =>
+      lastOne
+        ? 'This ends your forfeits and removes your data from the crew. You’re the last one in, so the crew gets deleted too.'
+        : 'This ends your forfeits and removes your data from the crew. Your streak and history won’t come with you.',
+    leaveConfirm: 'Leave',
+    leaveKeep: 'Stay',
   },
 
   profile: {

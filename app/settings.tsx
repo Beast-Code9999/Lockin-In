@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Switch, View } from 'react-native';
+import { Alert, StyleSheet, Switch, View } from 'react-native';
 
 import { copy } from '@/copy/en';
-import { useCancelVacation, useSetVacation, useUpdateProfile } from '@/features/crew/mutations';
+import { useCancelVacation, useLeaveGroup, useSetVacation, useUpdateProfile } from '@/features/crew/mutations';
 import { friendlyError } from '@/features/errors';
 import { useHome } from '@/features/home/useHome';
 import { CONFIG } from '@/shared/constants';
@@ -26,19 +26,30 @@ function Stepper({ label, value, onMinus, onPlus, minusDisabled, plusDisabled }:
   );
 }
 
-/** Settings (SPEC §14.12) — M2: freeze tokens + vacation mode. More arrives with M4. */
+/** Settings (SPEC §14.12): freeze tokens, vacation mode, leave crew. More arrives with M4. */
 export default function SettingsScreen() {
   const { data: home } = useHome();
   const update = useUpdateProfile();
   const book = useSetVacation();
   const cancel = useCancelVacation();
+  const leave = useLeaveGroup();
   const [startOffset, setStartOffset] = useState(1);
   const [length, setLength] = useState(3);
-  if (!home) return null;
+  // No crew (e.g. just left one): the root gate is already routing to crew setup.
+  if (!home?.group) return null;
+  const crewName = home.group.name;
+
+  const confirmLeave = () => {
+    haptics.tick();
+    Alert.alert(copy.settings.leaveConfirmTitle(crewName), copy.settings.leaveConfirmBody(home.members.length <= 1), [
+      { text: copy.settings.leaveKeep, style: 'cancel' },
+      { text: copy.settings.leaveConfirm, style: 'destructive', onPress: () => leave.mutate() },
+    ]);
+  };
 
   const start = addDays(home.today_local, startOffset);
   const end = addDays(start, length - 1);
-  const error = update.error ?? book.error ?? cancel.error;
+  const error = update.error ?? book.error ?? cancel.error ?? leave.error;
 
   return (
     <Screen>
@@ -130,6 +141,14 @@ export default function SettingsScreen() {
           loading={book.isPending}
           onPress={() => book.mutate({ start, end }, { onSuccess: () => haptics.success() })}
         />
+      </BubbleCard>
+
+      <BubbleCard contentStyle={styles.card}>
+        <GameText variant="heading">{copy.settings.leaveTitle}</GameText>
+        <GameText variant="small" tone="muted">
+          {copy.settings.leaveBody(crewName)}
+        </GameText>
+        <BubbleButton label={copy.settings.leaveButton} variant="secondary" fullWidth loading={leave.isPending} onPress={confirmLeave} />
       </BubbleCard>
 
       {error ? (

@@ -2,6 +2,15 @@
 
 Choices made where SPEC.md was silent or ambiguous, or where a later instruction overrides it. Newest milestone on top.
 
+## Leave crew (added after M3)
+
+- **`leave_group()` removes your data from the crew** (SPEC §14.12): check-ins (private notes cascade), stats, events you caused, and your vacations. Your profile stays, so you can start or join another crew straight away.
+  - Leaving clears your check-ins because `checkins.group_id` is required and `(user_id, local_date)` is unique; rejoining starts clean.
+  - From M5, open boxes will also be closed here ("stops all forfeits").
+- **Ownership** passes to the longest-standing member. When the last member leaves, the crew is deleted.
+- **`groups.created_by` is now nullable, `on delete set null`.** Before this, deleting the account of anyone who'd created a crew failed with a foreign-key error.
+- **The crew sees "<name> left the crew 👋"** on the widget's last-event line, and the remaining members' widgets refresh.
+
 ## M3 — Widget & push
 
 - **Push path without a manual dashboard webhook.** Any insert into `notification_outbox` fires a statement trigger. The trigger uses `pg_net` to POST to `send-push`; the URL is in `app.settings.push_function_url`, not a secret. A pg_cron sweep every 5 minutes retries anything left unsent.

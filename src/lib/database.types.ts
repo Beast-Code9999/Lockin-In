@@ -131,14 +131,14 @@ isOneToOne: true
                   ]
                 },"groups": {
                   Row: {
-                    "created_at": string,"created_by": string,"id": string,"invite_code": string,"name": string,"timezone": string
+                    "created_at": string,"created_by": string | null,"id": string,"invite_code": string,"name": string,"timezone": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "created_at"?: string,"created_by": string,"id"?: string,"invite_code": string,"name": string,"timezone"?: string
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"invite_code": string,"name": string,"timezone"?: string
                   }
                   Update: {
-                    "created_at"?: string,"created_by"?: string,"id"?: string,"invite_code"?: string,"name"?: string,"timezone"?: string
+                    "created_at"?: string,"created_by"?: string | null,"id"?: string,"invite_code"?: string,"name"?: string,"timezone"?: string
                   }
                   Relationships: [
                     {
@@ -295,6 +295,9 @@ isOneToOne: false
                            },
 "join_group":
 { Args: { "p_invite_code": string }; Returns: Json
+                           },
+"leave_group":
+{ Args: Record<PropertyKey, never>; Returns: Json
                            },
 "register_device":
 { Args: { "p_platform": string,"p_token": string }; Returns: Json

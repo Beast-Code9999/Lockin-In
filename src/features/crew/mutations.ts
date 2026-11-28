@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { supabase } from '@/lib/supabase';
+import { refreshWidgets } from '@/widget/refresh';
 
 /** Every onboarding/crew mutation refreshes Home (which drives the onboarding gate) and the profile. */
 function useRefresh() {
@@ -82,5 +83,21 @@ export function useCancelVacation() {
       return data;
     },
     onSuccess: refresh,
+  });
+}
+
+/** Leave your crew (SPEC §14.12). Clears every cached query (they're all crew-scoped) and the widget. */
+export function useLeaveGroup() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.rpc('leave_group');
+      if (error) throw error;
+      return data as { group_id: string; group_deleted: boolean };
+    },
+    onSuccess: async () => {
+      await qc.invalidateQueries();
+      await refreshWidgets().catch(() => undefined);
+    },
   });
 }
