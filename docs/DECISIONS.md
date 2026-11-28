@@ -2,6 +2,21 @@
 
 Choices made where SPEC.md was silent or ambiguous, or where a later instruction overrides it. Newest milestone on top.
 
+## M2 — Scoring, stats & leaderboard
+
+- **Scoring core is one pure SQL function,** `app.score_sequence(statuses[])`, which turns statuses in date order into points and a streak per day. `app.recompute_user_stats` applies it to every row, then refreshes the `user_stats` cache. The TS mirror (`src/shared/scoring.ts`) is used only for the "Worth +12 pts" preview.
+- **One set of fixtures drives both sides.** The fixtures in `fixtures/scoring/*.json` were computed independently from the spec formula. `tests/scoring.test.ts` runs the TS mirror against them, and also generates `supabase/tests/020_scoring_fixtures.test.sql` for the SQL engine. Jest fails if that generated file is stale; regenerate it with `UPDATE_SCORING_SQL=1 npx jest tests/scoring.test.ts`.
+- **Gaps don't break a streak.** A day with no record is skipped. The finaliser turns every past gap into missed, frozen or vacation within the hour, so there are no lasting gaps.
+- **Season = the calendar month in the group's timezone, derived from the clock** (`app.current_season`). Season number counts months since the group's first season. Season points and the "S1 · 2d left" label stay correct before the M7 rollover job exists. M7 adds the snapshot and badges.
+- **One hourly cron job (`:05`) does both jobs:** it finalises missed days and recomputes everyone. That replaces the spec's separate daily "recompute all scores" job, and it also slides the 30-day window.
+- **Finaliser order:** vacation, then a freeze token (if auto-use is on), then missed. It skips a player for 24h after a timezone change. Mystery Boxes and the clown state for missed days arrive in M5.
+- **Freeze tokens are spent from the month the finaliser runs in** (lazy monthly reset in the player's timezone). A day on the 30th finalised on the 2nd uses the new month's tokens.
+- **Vacation cancel:** a vacation that hasn't started is cancelled outright. One already under way is cut short at today, so the days already spent stay as vacation.
+- **M1 impls were renamed, not copied.** `check_in_impl`, `undo_slip_impl` and `accept_pact_impl` became `*_core`, and new impls call the core and then recompute. That keeps the migration append-only without duplicating M1's rules. `check_in` now also returns the day's `points` and `streak_after`.
+- **Rival callout** is computed on the server from the 30-day score (ties broken by streak, then name): "X pts to catch Y 🎯", "Top of the board — X pts clear of Y 👑", or a tie message.
+- **Leaderboard sorting happens on the client** from `get_home` member stats (small crews). Ties share a position.
+- **Rank** stays a label in the database (`Rookie` … `Final Boss`); the client maps labels to keys for assets.
+
 ## M1 — Groups & check-ins
 
 - **RPCs are thin wrappers around `app.*_impl` functions.** The impls take the user ID and an injectable `p_now`, so the pgTAP tests control time and timezones. The public wrappers always pass `auth.uid()` and `now()`, so a client can never fake the clock.

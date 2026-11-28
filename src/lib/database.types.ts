@@ -137,6 +137,52 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"user_stats": {
+                  Row: {
+                    "badge_counts": NonNullable<Json>,"boxes_completed": number,"challenges_done": number,"clown_until": string | null,"coward_until": string | null,"current_streak": number,"flame_tier": number,"freeze_tokens_left": number,"freeze_tokens_month": string | null,"group_id": string,"last_checkin_date": string | null,"longest_streak": number,"rank": string,"reroll_used_season_id": string | null,"score_30d": number,"season_points": number,"updated_at": string,"urges_defeated": number,"user_id": string,"wingman_count": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "badge_counts"?: NonNullable<Json>,"boxes_completed"?: number,"challenges_done"?: number,"clown_until"?: string | null,"coward_until"?: string | null,"current_streak"?: number,"flame_tier"?: number,"freeze_tokens_left"?: number,"freeze_tokens_month"?: string | null,"group_id": string,"last_checkin_date"?: string | null,"longest_streak"?: number,"rank"?: string,"reroll_used_season_id"?: string | null,"score_30d"?: number,"season_points"?: number,"updated_at"?: string,"urges_defeated"?: number,"user_id": string,"wingman_count"?: number
+                  }
+                  Update: {
+                    "badge_counts"?: NonNullable<Json>,"boxes_completed"?: number,"challenges_done"?: number,"clown_until"?: string | null,"coward_until"?: string | null,"current_streak"?: number,"flame_tier"?: number,"freeze_tokens_left"?: number,"freeze_tokens_month"?: string | null,"group_id"?: string,"last_checkin_date"?: string | null,"longest_streak"?: number,"rank"?: string,"reroll_used_season_id"?: string | null,"score_30d"?: number,"season_points"?: number,"updated_at"?: string,"urges_defeated"?: number,"user_id"?: string,"wingman_count"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "user_stats_group_id_fkey"
+      columns: ["group_id"]
+isOneToOne: false
+      referencedRelation: "groups"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "user_stats_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: true
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"vacations": {
+                  Row: {
+                    "cancelled_at": string | null,"created_at": string,"end_date": string,"id": string,"start_date": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "cancelled_at"?: string | null,"created_at"?: string,"end_date": string,"id"?: string,"start_date": string,"user_id": string
+                  }
+                  Update: {
+                    "cancelled_at"?: string | null,"created_at"?: string,"end_date"?: string,"id"?: string,"start_date"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "vacations_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -145,6 +191,9 @@ isOneToOne: false
           Functions: {
             "accept_pact":
 { Args: Record<PropertyKey, never>; Returns: Json
+                           },
+"cancel_vacation":
+{ Args: { "p_id": string }; Returns: Json
                            },
 "check_in":
 { Args: { "p_local_date": string,"p_note"?: string,"p_source"?: Database["public"]['Enums']["checkin_source"],"p_status": Database["public"]['Enums']["checkin_status"] }; Returns: Json
@@ -157,6 +206,9 @@ isOneToOne: false
                            },
 "join_group":
 { Args: { "p_invite_code": string }; Returns: Json
+                           },
+"set_vacation":
+{ Args: { "p_end": string,"p_start": string }; Returns: Json
                            },
 "undo_slip":
 { Args: { "p_local_date": string }; Returns: Json

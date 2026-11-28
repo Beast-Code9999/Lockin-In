@@ -60,7 +60,8 @@ export const copy = {
     streakLabel: 'day streak',
     score: 'Lock-In Score',
     season: 'Season pts',
-    scoringSoon: 'Points, streaks and ranks start counting in the next build.',
+    longest: (n: number) => `Best: ${n}`,
+    seasonLeft: (n: number, days: number) => `S${n} · ${days}d left`,
     loadError: "Couldn't load your crew HQ.",
     retry: 'Try again',
     crewToday: 'Crew today',
@@ -69,6 +70,8 @@ export const copy = {
 
   checkin: {
     checkInClean: 'CHECK IN CLEAN',
+    worth: (pts: number) => `Worth +${pts} pts`,
+    gained: (pts: number) => `+${pts} pts 🔥`,
     checkInYesterday: 'Check in for yesterday',
     yesterdayHint: "Yesterday's still open — lock it in before midnight.",
     opensAt: (time: string) => `Opens at ${time}`,
@@ -168,11 +171,55 @@ export const copy = {
   },
 
   soon: {
-    leaderboard: { title: 'The board is warming up', body: 'Scores, ranks and the season race drop in the next build.' },
     votes: { title: 'No votes yet', body: 'Proof checks and new box captions will land here.' },
   },
 
+  leaderboard: {
+    title: 'Leaderboard',
+    tabs: { score: 'Lock-In Score', season: 'Season', streak: 'Streak' },
+    units: { score: 'pts', season: 'pts', streak: 'days' },
+    explain: {
+      score: 'Points from the last 30 days. Clean days earn more the longer your streak.',
+      season: (n: number, days: number) => `Season ${n} — this month's points. ${days} days left.`,
+      streak: 'Clean days in a row. Freezes and vacations pause it, they don’t break it.',
+    },
+    empty: 'The board fills up once your crew has signed the Pact.',
+    you: 'you',
+  },
+
+  member: {
+    back: 'Back',
+    score: 'Lock-In Score',
+    season: 'Season pts',
+    streak: 'Streak',
+    longest: 'Best streak',
+    checkedToday: 'Checked in today ✓',
+    notYet: 'Not checked in yet today',
+    onVacation: 'On vacation 🏝️',
+    notFound: 'That player isn’t in your crew.',
+  },
+
+  settings: {
+    title: 'Settings',
+    open: 'Settings',
+    freezeTitle: 'Freeze tokens',
+    freezeBody: (left: number, total: number) =>
+      `${left} of ${total} left this month. If you miss a day, a token freezes it instead — your streak pauses and no box drops. Tokens reset on the 1st, no rollover.`,
+    autoFreeze: 'Use freeze tokens automatically',
+    vacationTitle: 'Vacation mode',
+    vacationBody: 'Book days off in advance (from tomorrow). They won’t count against you or break your streak. Max 10 days in any 30.',
+    startLabel: 'Starts',
+    lengthLabel: 'Length',
+    days: (n: number) => (n === 1 ? '1 day' : `${n} days`),
+    book: 'Book vacation',
+    booked: 'Booked',
+    cancel: 'Cancel',
+    noVacations: 'No vacations booked.',
+    range: (from: string, to: string) => (from === to ? from : `${from} – ${to}`),
+  },
+
   profile: {
+    settings: 'Settings',
     signedInAs: 'Signed in as',
     signOut: 'Sign out',
     uiKit: 'UI kit (dev)',
@@ -205,6 +252,13 @@ export const copy = {
     NOTHING_TO_UNDO: 'Nothing to undo.',
     NOTE_TOO_LONG: 'Notes max out at 500 characters.',
     PROFILE_NOT_FOUND: 'Your profile is missing. Try signing out and back in.',
+    VACATION_INVALID: 'Pick a valid start and end date.',
+    VACATION_TOO_SOON: 'Vacations have to start tomorrow or later.',
+    VACATION_TOO_LONG: 'One vacation can be at most 10 days.',
+    VACATION_OVERLAP: 'That overlaps a vacation you’ve already booked.',
+    VACATION_LIMIT: 'That would be more than 10 vacation days in 30. Nice try.',
+    VACATION_NOT_FOUND: 'That vacation no longer exists.',
+    VACATION_ALREADY_OVER: 'That vacation is already over.',
   },
 
   notFound: {

@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { copy } from '@/copy/en';
 import { friendlyError } from '@/features/errors';
 import { friendlyTime } from '@/shared/dates';
+import { previewCleanPoints } from '@/shared/scoring';
 import { BubbleButton, BubbleCard, GameText, haptics, Sprite } from '@/ui';
 
 import type { HomeData } from '../home/types';
@@ -32,7 +33,7 @@ export function CheckInCard({ home }: { home: HomeData }) {
 
   useEffect(() => {
     if (!flash) return;
-    const id = setTimeout(() => setFlash(null), 3_500);
+    const id = setTimeout(() => setFlash(null), 4_000);
     return () => clearTimeout(id);
   }, [flash]);
 
@@ -40,9 +41,10 @@ export function CheckInCard({ home }: { home: HomeData }) {
     checkIn.mutate(
       { date, status: 'clean' },
       {
-        onSuccess: () => {
+        onSuccess: (result) => {
           haptics.success();
-          setFlash(success);
+          const points = (result as { points?: number } | null)?.points;
+          setFlash(points ? `${success} ${copy.checkin.gained(points)}` : success);
         },
         onError: () => haptics.warning(),
       },
@@ -93,9 +95,14 @@ export function CheckInCard({ home }: { home: HomeData }) {
         </>
       ) : null}
 
+      {state.kind === 'ready' || state.kind === 'opensLater' ? (
+        <GameText variant="caption" tone="clean" align="center">
+          {copy.checkin.worth(previewCleanPoints(home.stats.current_streak))}
+        </GameText>
+      ) : null}
       {state.kind === 'doneClean' ? (
         <View style={styles.done}>
-          <Sprite name="flame/tier2" size={56} />
+          <Sprite name={`flame/tier${Math.max(1, home.stats.flame_tier) as 1 | 2 | 3 | 4}`} size={56} />
           <View style={styles.flex}>
             <GameText variant="heading" tone="clean">
               {copy.checkin.lockedIn}

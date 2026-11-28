@@ -73,6 +73,8 @@ function RootNavigator() {
           route alphabetically, which would be dev/ui-kit in dev builds. */}
       <Stack.Protected guard={inGame} redirectTo={signedIn ? '/setup' : '/onboarding'}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="profile/[uid]" options={{ animation: 'slide_from_right' }} />
+        <Stack.Screen name="settings" options={{ animation: 'slide_from_right' }} />
       </Stack.Protected>
       <Stack.Protected guard={signedIn && !inGame} redirectTo={signedIn ? '/' : '/onboarding'}>
         <Stack.Screen name="setup" />

@@ -45,7 +45,7 @@ tests/               repo-level tests (discretion scan, parity, assets)
 ## Milestones
 - [x] **M0 Foundations:** Expo app, Bubble Arcade UI kit, pixel-art pipeline, Supabase schema foundations + RLS, Google sign-in
 - [x] **M1 Groups & check-ins:** onboarding (player, clock, crew + invite code, Pact), check-in card with 5pm window, backfill, honest slips + undo, crew strip, History calendar
-- [ ] M2 Scoring, stats & leaderboard
+- [x] **M2 Scoring, stats & leaderboard:** points + streaks (SQL engine, TS preview, shared fixtures), hourly finaliser (vacation → freeze → missed), freeze tokens, vacation mode, ranks/flames/XP, rival callout, Leaderboard with podium, member profiles, Settings
 - [ ] M3 Widget (the centrepiece) + push
 - [ ] M4 Notifications
 - [ ] M5 Mystery Box & loot

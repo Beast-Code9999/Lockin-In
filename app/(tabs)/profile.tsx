@@ -7,6 +7,7 @@ import { signOut } from '@/features/auth/google';
 import { useSession } from '@/features/auth/session';
 import { useHome } from '@/features/home/useHome';
 import { useMyProfile } from '@/features/profile/useMyProfile';
+import { rankKeyFromLabel } from '@/shared/ranks';
 import { Avatar, BubbleButton, BubbleCard, GameText, RankBadge, Screen } from '@/ui';
 
 /** Profile (SPEC §14.5): who you are, your crew + invite code, sign out. Badges and stats arrive with M2/M7. */
@@ -19,11 +20,11 @@ export default function ProfileScreen() {
   return (
     <Screen withTabBar>
       <BubbleCard contentStyle={styles.card}>
-        <Avatar inputs={{ avatarId: profile.data?.avatar_id ?? 'blaze', rank: 'rookie' }} size={120} />
+        <Avatar inputs={{ avatarId: profile.data?.avatar_id ?? 'blaze', rank: rankKeyFromLabel(home.data?.stats.rank) }} size={120} />
         <GameText variant="title" align="center">
           {profile.data?.display_name ?? '…'}
         </GameText>
-        <RankBadge rank="rookie" style={styles.center} />
+        <RankBadge rank={rankKeyFromLabel(home.data?.stats.rank)} style={styles.center} />
         <View style={styles.meta}>
           <GameText variant="caption" tone="faint" align="center">
             {copy.profile.signedInAs}
@@ -60,6 +61,8 @@ export default function ProfileScreen() {
           />
         </BubbleCard>
       ) : null}
+
+      <BubbleButton label={copy.profile.settings} icon="status/frozen" fullWidth onPress={() => router.push('/settings')} />
 
       <BubbleButton
         label={copy.profile.signOut}

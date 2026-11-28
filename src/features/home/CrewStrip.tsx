@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 
 import { copy } from '@/copy/en';
+import { rankKeyFromLabel } from '@/shared/ranks';
 import { Avatar, BubbleCard, GameText, Sprite } from '@/ui';
 
 import type { CrewMember } from './types';
@@ -18,12 +19,12 @@ export function CrewStrip({ members }: { members: CrewMember[] }) {
             key={m.id}
             style={styles.member}
             accessible
-            accessibilityLabel={`${m.display_name}: ${m.checked_today ? 'checked in' : 'not yet'}`}
+            accessibilityLabel={`${m.display_name}: ${m.checked_today ? 'checked in' : m.on_vacation_today ? 'on vacation' : 'not yet'}`}
           >
             <View>
-              <Avatar inputs={{ avatarId: m.avatar_id, rank: 'rookie' }} size={52} />
+              <Avatar inputs={{ avatarId: m.avatar_id, rank: rankKeyFromLabel(m.stats.rank) }} size={52} />
               <View style={styles.badge}>
-                <Sprite name={m.checked_today ? 'status/checked' : 'status/pending'} size={20} />
+                <Sprite name={m.checked_today ? 'status/checked' : m.on_vacation_today ? 'status/vacation' : 'status/pending'} size={20} />
               </View>
             </View>
             <GameText variant="caption" tone={m.is_me ? 'aqua' : 'text'} numberOfLines={1} style={styles.name}>

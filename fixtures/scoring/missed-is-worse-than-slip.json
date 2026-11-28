@@ -1,0 +1,33 @@
+{
+  "name": "missed-is-worse-than-slip",
+  "description": "Honesty-first (SPEC \u00a75): a slip costs the streak; a missed day costs the streak and 5 points.",
+  "statuses": [
+    "clean",
+    "clean",
+    "relapse",
+    "clean",
+    "clean",
+    "missed"
+  ],
+  "expected": {
+    "points": [
+      11,
+      11,
+      0,
+      11,
+      11,
+      -5
+    ],
+    "streakAfter": [
+      1,
+      2,
+      0,
+      1,
+      2,
+      0
+    ],
+    "total": 39,
+    "currentStreak": 0,
+    "longestStreak": 2
+  }
+}

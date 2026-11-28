@@ -4,7 +4,7 @@ import { checkinCardState, slipTarget } from './cardState';
 
 const base: HomeData = {
   now: '2026-12-10T08:00:00Z',
-  me: { id: 'u1', display_name: 'Jason', avatar_id: 'blaze', timezone: 'Australia/Darwin', reminder_time: '21:00' },
+  me: { id: 'u1', display_name: 'Jason', avatar_id: 'blaze', timezone: 'Australia/Darwin', reminder_time: '21:00', auto_use_freeze: true },
   today_local: '2026-12-10',
   yesterday_local: '2026-12-09',
   local_time: '17:30',
@@ -19,10 +19,13 @@ const base: HomeData = {
     pact_accepted_at: '2026-12-01T03:00:00Z',
     first_eligible_date: '2026-12-01',
   },
-  season: { number: 1, starts_on: '2026-12-01', ends_on: '2026-12-31' },
+  season: { number: 1, starts_on: '2026-12-01', ends_on: '2026-12-31', days_left: 21 },
+  stats: { current_streak: 0, longest_streak: 0, score_30d: 0, season_points: 0, rank: 'Rookie', flame_tier: 0, freeze_tokens_left: 2 },
+  rival: null,
   today: null,
   yesterday: { status: 'clean', source: 'app', created_at: '', updated_at: '', note: null },
   members: [],
+  vacations: [],
 };
 const day = (status: 'clean' | 'relapse', updated_at = '2026-12-10T08:00:00Z') => ({ status, source: 'app' as const, created_at: updated_at, updated_at, note: null });
 

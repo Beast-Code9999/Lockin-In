@@ -11,12 +11,13 @@ function useRefresh() {
 export function useUpdateProfile() {
   const refresh = useRefresh();
   return useMutation({
-    mutationFn: async (input: { displayName?: string; avatarId?: string; timezone?: string; reminderTime?: string }) => {
+    mutationFn: async (input: { displayName?: string; avatarId?: string; timezone?: string; reminderTime?: string; autoUseFreeze?: boolean }) => {
       const { data, error } = await supabase.rpc('update_profile', {
         p_display_name: input.displayName,
         p_avatar_id: input.avatarId,
         p_timezone: input.timezone,
         p_reminder_time: input.reminderTime,
+        p_auto_use_freeze: input.autoUseFreeze,
       });
       if (error) throw error;
       return data;
@@ -55,6 +56,30 @@ export function useAcceptPact() {
     mutationFn: async () => {
       const { error } = await supabase.rpc('accept_pact');
       if (error) throw error;
+    },
+    onSuccess: refresh,
+  });
+}
+
+export function useSetVacation() {
+  const refresh = useRefresh();
+  return useMutation({
+    mutationFn: async (input: { start: string; end: string }) => {
+      const { data, error } = await supabase.rpc('set_vacation', { p_start: input.start, p_end: input.end });
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: refresh,
+  });
+}
+
+export function useCancelVacation() {
+  const refresh = useRefresh();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { data, error } = await supabase.rpc('cancel_vacation', { p_id: id });
+      if (error) throw error;
+      return data;
     },
     onSuccess: refresh,
   });
