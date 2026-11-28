@@ -43,6 +43,7 @@ export const PIXEL_ASSETS = {
   'flame/tier4': { source: require('../../assets/pixel/flame/tier4.png'), width: 16, height: 16 },
   'fx/glow': { source: require('../../assets/pixel/fx/glow.png'), width: 64, height: 32 },
   'fx/sparkle': { source: require('../../assets/pixel/fx/sparkle.png'), width: 8, height: 8 },
+  'icon/bell': { source: require('../../assets/pixel/icon/bell.png'), width: 12, height: 12 },
   'icon/bolt': { source: require('../../assets/pixel/icon/bolt.png'), width: 12, height: 12 },
   'icon/coin': { source: require('../../assets/pixel/icon/coin.png'), width: 12, height: 12 },
   'icon/hourglass': { source: require('../../assets/pixel/icon/hourglass.png'), width: 12, height: 12 },

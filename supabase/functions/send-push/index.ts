@@ -81,7 +81,8 @@ function fcmMessage(row: OutboxRow, token: string) {
     android: {
       priority: 'HIGH',
       ...(row.collapse_key ? { collapse_key: row.collapse_key } : {}),
-      notification: { channel_id: row.channel ?? 'group' },
+      // `notification_icon` is the white padlock the app ships in res/drawable (plugins/withNotifications.js).
+      notification: { channel_id: row.channel ?? 'group', icon: 'notification_icon', color: '#2F7BFF' },
     },
   };
 }

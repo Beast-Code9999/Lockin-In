@@ -251,6 +251,19 @@ export const copy = {
     leaveKeep: 'Stay',
   },
 
+  notifications: {
+    title: 'Notifications',
+    reminderLabel: 'Remind me',
+    reminderHint: (opensAt: string) => `Only if you haven’t checked in yet, and never before check-in opens at ${opensAt}.`,
+    categories: {
+      reminders: { label: 'Reminders', hint: 'Daily nudge, plus a final warning before yesterday locks' },
+      group: { label: 'Crew activity', hint: 'Missed days, freezes, rank ups, streaks, vacations' },
+      boxes: { label: 'Mystery boxes', hint: 'Boxes, reveals and votes' },
+      friend_checkins: { label: 'Friend check-ins', hint: 'A ping every time a mate checks in' },
+    },
+    sosNote: 'Backup requests (SOS) always come through. That’s the whole point. You can only mute them in Android settings.',
+  },
+
   profile: {
     settings: 'Settings',
     signedInAs: 'Signed in as',
@@ -286,6 +299,7 @@ export const copy = {
     NOTE_TOO_LONG: 'Notes max out at 500 characters.',
     PROFILE_NOT_FOUND: 'Your profile is missing. Try signing out and back in.',
     VACATION_INVALID: 'Pick a valid start and end date.',
+    NOTIFY_PREFS_INVALID: 'Couldn’t save that setting. Try again.',
     VACATION_TOO_SOON: 'Vacations have to start tomorrow or later.',
     VACATION_TOO_LONG: 'One vacation can be at most 10 days.',
     VACATION_OVERLAP: 'That overlaps a vacation you’ve already booked.',

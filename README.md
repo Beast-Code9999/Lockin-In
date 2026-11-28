@@ -47,7 +47,7 @@ tests/               repo-level tests (discretion scan, parity, assets)
 - [x] **M1 Groups & check-ins:** onboarding (player, clock, crew + invite code, Pact), check-in card with 5pm window, backfill, honest slips + undo, crew strip, History calendar
 - [x] **M2 Scoring, stats & leaderboard:** points + streaks (SQL engine, TS preview, shared fixtures), hourly finaliser (vacation → freeze → missed), freeze tokens, vacation mode, ranks/flames/XP, rival callout, Leaderboard with podium, member profiles, Settings
 - [x] **M3 Widget & push:** Leaderboard (4×2→4×3) + Mini widgets in the Bubble Arcade style, two-step widget check-in, offline queue, FCM silent refresh pushes via outbox → pg_net → Edge Function, Widget Debug screen
-- [ ] M4 Notifications
+- [x] **M4 Notifications:** channels, daily reminder + final warning, crew events (missed, freeze, rank up, streak milestones, vacations, opt-in friend check-ins), per-category toggles + reminder time, deep links
 - [ ] M5 Mystery Box & loot
 - [ ] M6 SOS
 - [ ] M7 Seasons, badges, polish

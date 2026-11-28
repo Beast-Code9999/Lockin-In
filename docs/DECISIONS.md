@@ -2,6 +2,30 @@
 
 Choices made where SPEC.md was silent or ambiguous, or where a later instruction overrides it. Newest milestone on top.
 
+## M4 — Notifications
+
+- **One queue function.** Everything that notifies calls `app.notify()`:
+  - It skips players with no registered phone and respects `notify_prefs`.
+  - It de-duplicates with a once-key logged in `app.notify_log`, so cron re-runs, undo → redo and finaliser re-runs never double-send.
+  - `app.notify_crew()` fans out to the rest of the crew (Pact signed).
+- **Events come from triggers**, like the M3 refresh pushes:
+  - On `checkins`: missed (self + crew), frozen (crew), and friend checked in (crew, opt-in).
+  - On `user_stats`: rank up or streak milestone (crew). A rank up wins when both happen together.
+  - On `vacations`: a vacation was booked (crew).
+- **Honest slips are never announced as slips.** The opt-in "friend checked in" notice says "✅ Miguel checked in" for both clean days and slips (CLAUDE.md rule 3).
+- **Box copy waits for M5.** "You owe a Mystery Box" and "…or the box gets you 📦" describe boxes that don't exist yet, so M4 says "Your streak reset" and "…or it counts as missed". M5 switches to the SPEC wording.
+- **Reminders** (`app.send_reminders`, every 15 minutes) use "the time has passed and nothing was sent today", not an exact 15-minute slot, so a late or skipped cron run never loses one.
+  - A reminder time before 5pm waits until check-in opens.
+  - The final warning goes `FINAL_WARNING_HOURS` (2) before yesterday's deadline, if yesterday is still open and not a vacation day.
+- **Preferences:** `reminders`, `group`, `boxes` (default on) and `friend_checkins` (default off). `set_notify_prefs` rejects unknown keys and refuses `sos`, which can only be muted in Android settings (SPEC §13).
+- **No notification library.** `plugins/withNotifications.js`:
+  - creates the four channels natively in `MainApplication.onCreate`, so they exist before the first push even while the app has never opened;
+  - ships a white padlock as `@drawable/notification_icon` and makes it FCM's default icon.
+  - `send-push` also sets the icon and the brand blue on each message.
+- **Showing notifications:** Android shows FCM notifications on its own while the app is in the background. While it's open, the app shows an in-app banner instead.
+- **Taps:** both open `data.link`, but only routes on the `routeForLink` allow-list (unit-tested); anything else opens Home.
+- **Permission:** Android 13+ asks for notification permission once the player is in the game (`PermissionsAndroid`, no extra dependency).
+
 ## Leave crew (added after M3)
 
 - **`leave_group()` removes your data from the crew** (SPEC §14.12): check-ins (private notes cascade), stats, events you caused, and your vacations. Your profile stays, so you can start or join another crew straight away.

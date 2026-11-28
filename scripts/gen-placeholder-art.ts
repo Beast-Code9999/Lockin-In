@@ -155,6 +155,12 @@ async function writeAppIcons(): Promise<void> {
   const mono = fg.clone().clip((x, y) => !fire.has(fg.get(x, y).slice(0, 3).join(',')) || fg.get(x, y)[3] === 0);
   await writePng(mono.tint(WHITE), join(IMAGES_DIR, 'android-icon-monochrome.png'), 10);
 
+  // Notification status-bar icon: white silhouette (Android ignores colour), keyhole cut out.
+  // 24 cells × 4 = 96px (xxxhdpi); copied into res/drawable by plugins/withNotifications.js.
+  const keyhole = new Set(Object.values(FIRE).map((c) => rgba(c).slice(0, 3).join(',')));
+  const status = lock.clone().clip((x, y) => !keyhole.has(lock.get(x, y).slice(0, 3).join(',')) || lock.get(x, y)[3] === 0);
+  await writePng(status.tint(WHITE), join(IMAGES_DIR, 'notification-icon.png'), 4);
+
   // Splash: padlock alone (the splash background colour comes from app.config.ts).
   await writePng(lock, join(IMAGES_DIR, 'splash-icon.png'), 20);
 }

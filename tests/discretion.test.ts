@@ -16,7 +16,7 @@ const ROOT = join(__dirname, '..');
 const EXCLUDED_FILES = new Set(['SPEC.md', 'CLAUDE.md']);
 const EXCLUDED_DIRS = new Set(['node_modules', '.git', 'android', 'ios', '.expo', 'dist', 'coverage', '.temp', '.branches']);
 const TEXT_EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.json', '.md', '.sql', '.txt', '.jsonc', '.xml', '.example', '']);
-const SCAN_ROOTS = ['app', 'src', 'assets', 'supabase', 'docs', 'scripts', 'fixtures', 'tests'];
+const SCAN_ROOTS = ['app', 'src', 'assets', 'supabase', 'docs', 'scripts', 'fixtures', 'tests', 'plugins'];
 const SCAN_FILES = ['app.config.ts', 'package.json', 'index.ts', 'README.md', '.env.example'];
 
 function walk(dir: string, out: string[] = []): string[] {

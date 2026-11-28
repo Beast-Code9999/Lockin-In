@@ -13,7 +13,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Lockin' In",
   slug: 'lockinin',
-  version: '0.4.0',
+  version: '0.5.0',
   orientation: 'portrait',
   scheme: 'lockinin',
   userInterfaceStyle: 'dark',
@@ -22,7 +22,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   android: {
     package: 'com.jasonlay.lockinin',
     // Bump on every APK you hand out so Android installs it as an update.
-    versionCode: 4,
+    versionCode: 5,
     adaptiveIcon: {
       backgroundColor: '#2F7BFF',
       foregroundImage: './assets/images/android-icon-foreground.png',
@@ -40,6 +40,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     'expo-router',
     './plugins/withGradleMemory',
+    './plugins/withNotifications',
     ['expo-splash-screen', { backgroundColor: BG, image: './assets/images/splash-icon.png', imageWidth: 140 }],
     googleIosUrlScheme ? ['@react-native-google-signin/google-signin', { iosUrlScheme: googleIosUrlScheme }] : '@react-native-google-signin/google-signin',
     '@react-native-firebase/app',

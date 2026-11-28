@@ -290,6 +290,9 @@ isOneToOne: false
 "get_home":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
+"get_notify_prefs":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
 "get_widget_snapshot":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
@@ -301,6 +304,9 @@ isOneToOne: false
                            },
 "register_device":
 { Args: { "p_platform": string,"p_token": string }; Returns: Json
+                           },
+"set_notify_prefs":
+{ Args: { "p_prefs": Json }; Returns: Json
                            },
 "set_vacation":
 { Args: { "p_end": string,"p_start": string }; Returns: Json

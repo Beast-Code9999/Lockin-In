@@ -5,6 +5,8 @@ import { Alert, StyleSheet, Switch, View } from 'react-native';
 import { copy } from '@/copy/en';
 import { useCancelVacation, useLeaveGroup, useSetVacation, useUpdateProfile } from '@/features/crew/mutations';
 import { friendlyError } from '@/features/errors';
+import { shiftTime, timeLabel } from '@/features/notifications/links';
+import { NOTIFY_CATEGORIES, useNotifyPrefs, useSetNotifyPref, useSetReminderTime } from '@/features/notifications/prefs';
 import { useHome } from '@/features/home/useHome';
 import { CONFIG } from '@/shared/constants';
 import { addDays, shortDateLabel } from '@/shared/dates';
@@ -26,7 +28,78 @@ function Stepper({ label, value, onMinus, onPlus, minusDisabled, plusDisabled }:
   );
 }
 
-/** Settings (SPEC §14.12): freeze tokens, vacation mode, leave crew. More arrives with M4. */
+const REMINDER_STEP_MINUTES = 30;
+
+function NotificationsCard() {
+  const { data } = useNotifyPrefs();
+  const toggle = useSetNotifyPref();
+  const setTime = useSetReminderTime();
+  if (!data) return null;
+  const time = setTime.isPending && setTime.variables ? setTime.variables : data.reminder_time;
+  const step = (minutes: number) => {
+    haptics.tick();
+    setTime.mutate(shiftTime(time, minutes));
+  };
+
+  return (
+    <BubbleCard contentStyle={styles.card}>
+      <View style={styles.row}>
+        <Sprite name="icon/bell" size={36} />
+        <GameText variant="heading" style={styles.flex}>
+          {copy.notifications.title}
+        </GameText>
+      </View>
+
+      <Stepper
+        label={copy.notifications.reminderLabel}
+        value={timeLabel(time)}
+        onMinus={() => step(-REMINDER_STEP_MINUTES)}
+        onPlus={() => step(REMINDER_STEP_MINUTES)}
+        minusDisabled={false}
+        plusDisabled={false}
+      />
+      <GameText variant="small" tone="faint">
+        {copy.notifications.reminderHint(timeLabel(CONFIG.CHECKIN_OPENS_AT))}
+      </GameText>
+
+      {NOTIFY_CATEGORIES.map((category) => {
+        const on = data.prefs[category];
+        const text = copy.notifications.categories[category];
+        return (
+          <View key={category} style={styles.row}>
+            <View style={styles.flex}>
+              <GameText variant="bodyStrong">{text.label}</GameText>
+              <GameText variant="small" tone="muted">
+                {text.hint}
+              </GameText>
+            </View>
+            <Switch
+              value={on}
+              onValueChange={(v) => {
+                haptics.tick();
+                toggle.mutate({ category, on: v });
+              }}
+              trackColor={{ false: colours.surface2, true: colours.primary }}
+              thumbColor={on ? colours.aqua : colours.textMuted}
+              accessibilityLabel={text.label}
+            />
+          </View>
+        );
+      })}
+
+      <GameText variant="small" tone="faint">
+        {copy.notifications.sosNote}
+      </GameText>
+      {toggle.error || setTime.error ? (
+        <GameText variant="small" tone="slipped">
+          {friendlyError(toggle.error ?? setTime.error)}
+        </GameText>
+      ) : null}
+    </BubbleCard>
+  );
+}
+
+/** Settings (SPEC §14.12): notifications, freeze tokens, vacation mode, leave crew. */
 export default function SettingsScreen() {
   const { data: home } = useHome();
   const update = useUpdateProfile();
@@ -59,6 +132,8 @@ export default function SettingsScreen() {
           {copy.settings.title}
         </GameText>
       </View>
+
+      <NotificationsCard />
 
       <BubbleCard contentStyle={styles.card}>
         <View style={styles.row}>

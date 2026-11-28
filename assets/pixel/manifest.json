@@ -343,6 +343,16 @@
       "category": "icon",
       "custom": false
     },
+    "icon/bell": {
+      "file": "icon/bell.png",
+      "grid": [
+        12,
+        12
+      ],
+      "baseDp": 48,
+      "category": "icon",
+      "custom": false
+    },
     "icon/bolt": {
       "file": "icon/bolt.png",
       "grid": [

@@ -49,7 +49,7 @@ select is(
 );
 update public.notification_outbox set sent_at = now();
 select app.finalize_missed_days('2026-12-04 03:00Z');
-select is((select count(*)::int from public.notification_outbox where sent_at is null and user_id in (:'jason', :'miguel', :'ken')), 2, 'a finaliser run queues one refresh per member, not one per row');
+select is((select count(*)::int from public.notification_outbox where sent_at is null and kind = 'data' and user_id in (:'jason', :'miguel', :'ken')), 2, 'a finaliser run queues one refresh per member, not one per row');
 
 -- ------------------------------------------------------------------ widget snapshot (SPEC §12.5)
 select tests.authenticate_as(:'jason');

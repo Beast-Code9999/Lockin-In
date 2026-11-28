@@ -817,6 +817,11 @@ const MISC_ICONS: Record<string, () => PixelCanvas> = {
       ['............', '....SSSS....', '...S....S...', '...S....S...', '..BBBBBBBB..', '..BLLBBBBB..', '..BBBOOBBB..', '..BBBOOBBB..', '..BBBBBBBB..', '..dddddddd..', '............', '............'],
       { S: STEEL.base, B: BUBBLE, L: BUBBLE_LIGHT, O: FIRE.mid, d: BUBBLE_DARK },
     ),
+  bell: () =>
+    icon(
+      ['.....YY.....', '....YYYY....', '...YLYYYY...', '...YLYYYY...', '...YYYYYY...', '..YYYYYYYY..', '..YYYYYYYY..', '.YYYYYYYYYY.', '.dddddddddd.', '.....dd.....', '............', '............'],
+      { Y: GOLD.base, L: GOLD.light, d: GOLD.dark },
+    ),
   bolt: () => rankIcon('final-boss'),
   star: () =>
     icon(
