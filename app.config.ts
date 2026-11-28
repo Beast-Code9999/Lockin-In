@@ -13,7 +13,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: "Lockin' In",
   slug: 'lockinin',
-  version: '0.1.0',
+  version: '0.2.0',
   orientation: 'portrait',
   scheme: 'lockinin',
   userInterfaceStyle: 'dark',
@@ -21,6 +21,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/images/icon.png',
   android: {
     package: 'com.jasonlay.lockinin',
+    // Bump on every APK you hand out so Android installs it as an update.
+    versionCode: 2,
     adaptiveIcon: {
       backgroundColor: '#2F7BFF',
       foregroundImage: './assets/images/android-icon-foreground.png',
