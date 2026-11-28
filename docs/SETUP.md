@@ -80,6 +80,30 @@ On the phone: **Let's lock in → Sign in with Google**. You'll land on Home wit
 - **Ports:** the local database uses ports 553xx (API 55321, Studio 55323) so it can run alongside other local Supabase projects.
 - **After schema changes:** `npm run db:reset` re-applies migrations locally, and `npm run db:types` regenerates the TypeScript types.
 
+## 4. 🖐 Firebase, for push (free Spark plan, FCM only)
+1. At **console.firebase.google.com**, add Firebase to the **Lockin In** Google Cloud project. Turn Google Analytics **off** and stay on **Spark**.
+2. **Add app → Android:** package `com.jasonlay.lockinin`, plus the debug SHA-1 from section 3b. Download **`google-services.json`** into the repo root (it's gitignored). Skip the SDK steps.
+3. Under **⚙️ Project settings → Cloud Messaging**, check that **Firebase Cloud Messaging API (V1)** is **Enabled**.
+4. Under **⚙️ Project settings → Service accounts → Generate new private key**, save the file as **`service-account.json`** in the repo root (gitignored, a real secret).
+5. **Grant the service account permission to send.** Go to **console.cloud.google.com/iam-admin/iam?project=<firebase-project-id> → Grant access**. Principal: `firebase-adminsdk-fbsvc@<firebase-project-id>.iam.gserviceaccount.com`. Role: **Firebase Cloud Messaging API Admin**. Without this, FCM answers 403.
+6. Store the key and deploy:
+   ```bash
+   npx supabase secrets set FCM_SERVICE_ACCOUNT_JSON="$(cat service-account.json)"
+   npx supabase functions deploy send-push --no-verify-jwt --use-api
+   npx supabase db push
+   ```
+
+### Testing push locally
+```bash
+python3 -c "import json;print(\"FCM_SERVICE_ACCOUNT_JSON='\"+json.dumps(json.load(open('service-account.json')),separators=(',',':'))+\"'\")" > supabase/functions/.env.local
+npx supabase functions serve send-push --no-verify-jwt --env-file supabase/functions/.env.local
+# point the local DB's trigger at the local function:
+docker exec supabase_db_lockinin psql -U postgres -c "update app.settings set value='http://supabase_kong_lockinin:8000/functions/v1/send-push' where key='push_function_url'"
+```
+
+## Widget
+- Long-press the home screen → **Widgets** → **Lockin' In** → drag **crew board** (4×2) or **me** (2×1).
+- In dev builds, **Profile → Widgets (dev)** previews every state and can pin any scenario onto the real widget.
+
 ## Later milestones will ask for
-- **M3:** a Firebase project on the free **Spark** plan, used for push notifications only. Add the Android app `com.jasonlay.lockinin`, download `google-services.json` (gitignored), create a service-account key, and store it as the Supabase secret `FCM_SERVICE_ACCOUNT_JSON`.
-- **M3/M4:** enable the `pg_cron` and `pg_net` database extensions, and create the Database Webhook `notification_outbox` → `send-push`.
+- **M4:** nothing new; notification channels and reminders use the same FCM setup.

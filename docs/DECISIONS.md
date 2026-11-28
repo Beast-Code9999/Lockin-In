@@ -2,6 +2,27 @@
 
 Choices made where SPEC.md was silent or ambiguous, or where a later instruction overrides it. Newest milestone on top.
 
+## M3 — Widget & push
+
+- **Push path without a manual dashboard webhook.** Any insert into `notification_outbox` fires a statement trigger. The trigger uses `pg_net` to POST to `send-push`; the URL is in `app.settings.push_function_url`, not a secret. A pg_cron sweep every 5 minutes retries anything left unsent.
+- **`send-push` is deployed with `--no-verify-jwt`.** It takes no input and only drains the outbox, so calling it can do nothing but deliver pushes already queued. That means no service key needs storing in SQL.
+- **The function claims rows atomically.** `claim_outbox()` (`FOR UPDATE SKIP LOCKED`, service-role only) means overlapping runs never double-send. Tokens FCM reports as unregistered or invalid are deleted.
+- **Refresh pushes come from triggers, not RPC code.** Statement-level triggers on `checkins` and `group_members`, and row triggers on name/avatar/vacation changes, queue one deduped `group_updated` data push per crew member with a device. Every path that changes the board (check-ins, undo, the finaliser, joins) refreshes widgets without extra code. FCM `collapse_key` merges bursts.
+- **Snapshot (SPEC §12.5):** the server builds positions, statuses, season and rival (`get_widget_snapshot`). The client adds avatar layer keys and XP, using the same pure functions as the app, before caching under `widget_snapshot_v1`.
+- **Widget rendering:**
+  - Widget components carry `'use no memo'`. The project enables the React Compiler, whose memoisation hooks are illegal in widget JSX ("Invalid Hook Call").
+  - Avatars are stacked layers (`OverlapWidget`); no pre-composited images were needed.
+  - Fonts: Jersey 10 and Nunito ExtraBold, bundled through the widget plugin.
+- **The layout is sized from the widget's real height** (`src/widget/layout.ts`, unit-tested). Launchers give a 4×2 anywhere from about 140 to 210dp. The check-in button always fits; the rival line appears when there's room; XP and the last event appear at 4×3.
+- **Widget check-in:**
+  - A two-step confirm (5 seconds), stored in local storage. The headless task re-renders and reverts after the window.
+  - Slips can't be logged from the widget.
+  - If the request fails offline, it goes into `offline_checkins` and is retried on the next app foreground, push or widget update. Server rejections are kept, and Home explains them once.
+- **The SOS icon opens the app for now;** M6 points it at the SOS screen.
+- **Gradle memory:** `plugins/withGradleMemory.js` raises the JVM to 4 GB heap / 1.5 GB metaspace. Firebase plus the widget library overflow the template's 512 MB metaspace.
+- **Firebase setup lesson.** When Firebase is added to an *existing* Google Cloud project, its Admin SDK service account (`firebase-adminsdk-fbsvc@…`) may get **no IAM role**. FCM then returns 403 `cloudmessaging.messages.create`. Fix: grant it **Firebase Cloud Messaging API Admin** (see SETUP.md).
+- **Push is Android-only for now.** iOS needs its own Firebase config (`GoogleService-Info.plist`) when we get there.
+
 ## M2 — Scoring, stats & leaderboard
 
 - **Scoring core is one pure SQL function,** `app.score_sequence(statuses[])`, which turns statuses in date order into points and a streak per day. `app.recompute_user_stats` applies it to every row, then refreshes the `user_stats` cache. The TS mirror (`src/shared/scoring.ts`) is used only for the "Worth +12 pts" preview.

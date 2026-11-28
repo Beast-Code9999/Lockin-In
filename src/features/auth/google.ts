@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 import { copy } from '@/copy/en';
 import { env } from '@/lib/env';
 import { supabase } from '@/lib/supabase';
+import { clearWidgets } from '@/widget/refresh';
 
 export type SignInOutcome = { ok: true } | { ok: false; cancelled: boolean; message: string };
 
@@ -48,4 +49,5 @@ export async function signOut(): Promise<void> {
     // Not signed in with Google (e.g. a dev test player) — nothing to clear.
   }
   await supabase.auth.signOut();
+  await clearWidgets().catch(() => undefined);
 }

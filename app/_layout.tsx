@@ -4,18 +4,20 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { AppState, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { copy } from '@/copy/en';
 import { initAuthListener, useAuthStore } from '@/features/auth/session';
 import { onboardingStage } from '@/features/home/types';
 import { useHome } from '@/features/home/useHome';
+import { startPush } from '@/lib/push';
 import { queryClient, wireQueryFocus } from '@/lib/queryClient';
 import { startSupabaseAutoRefresh } from '@/lib/supabase';
 import { BubbleButton, EmptyState, Screen } from '@/ui';
 import { FONT_SOURCES } from '@/ui/fonts';
 import { colours } from '@/ui/theme';
+import { refreshWidgets } from '@/widget/refresh';
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
@@ -48,6 +50,21 @@ function RootNavigator() {
   const stage = home.data ? onboardingStage(home.data) : null;
 
   const ready = status !== 'loading' && (!signedIn || home.data !== undefined || home.isError);
+  const inGameNow = signedIn && stage === 'done';
+
+  // Register this phone for pushes and keep the home-screen widget fresh (SPEC §12.6).
+  useEffect(() => {
+    if (!inGameNow) return;
+    const stopPush = startPush();
+    void refreshWidgets();
+    const sub = AppState.addEventListener('change', (state) => {
+      if (state === 'active') void refreshWidgets();
+    });
+    return () => {
+      stopPush();
+      sub.remove();
+    };
+  }, [inGameNow]);
   useEffect(() => {
     if (ready) void SplashScreen.hideAsync().catch(() => undefined);
   }, [ready]);
@@ -84,6 +101,7 @@ function RootNavigator() {
       </Stack.Protected>
       <Stack.Protected guard={__DEV__}>
         <Stack.Screen name="dev/ui-kit" options={{ animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="dev/widgets" options={{ animation: 'slide_from_bottom' }} />
       </Stack.Protected>
     </Stack>
   );

@@ -75,7 +75,12 @@ export default function ProfileScreen() {
           setBusy(false);
         }}
       />
-      {__DEV__ ? <BubbleButton label={copy.profile.uiKit} variant="secondary" size="sm" icon="fx/sparkle" style={styles.center} onPress={() => router.push('/dev/ui-kit')} /> : null}
+      {__DEV__ ? (
+        <View style={styles.devRow}>
+          <BubbleButton label={copy.profile.uiKit} variant="secondary" size="sm" icon="fx/sparkle" onPress={() => router.push('/dev/ui-kit')} />
+          <BubbleButton label="Widgets (dev)" variant="secondary" size="sm" icon="tab/leaderboard" onPress={() => router.push('/dev/widgets')} />
+        </View>
+      ) : null}
     </Screen>
   );
 }
@@ -88,4 +93,5 @@ const styles = StyleSheet.create({
   crew: { alignItems: 'center', gap: 6 },
   stretch: { alignSelf: 'stretch' },
   code: { letterSpacing: 6 },
+  devRow: { flexDirection: 'row', gap: 10, justifyContent: 'center', flexWrap: 'wrap' },
 });

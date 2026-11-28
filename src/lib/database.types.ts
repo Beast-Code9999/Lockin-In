@@ -57,6 +57,52 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"device_tokens": {
+                  Row: {
+                    "platform": string,"token": string,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "platform": string,"token": string,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "platform"?: string,"token"?: string,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "device_tokens_user_id_fkey"
+      columns: ["user_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"group_events": {
+                  Row: {
+                    "actor_id": string | null,"created_at": string,"group_id": string,"id": number,"payload": NonNullable<Json>,"type": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "actor_id"?: string | null,"created_at"?: string,"group_id": string,"id"?: never,"payload"?: NonNullable<Json>,"type": string
+                  }
+                  Update: {
+                    "actor_id"?: string | null,"created_at"?: string,"group_id"?: string,"id"?: never,"payload"?: NonNullable<Json>,"type"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "group_events_actor_id_fkey"
+      columns: ["actor_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "group_events_group_id_fkey"
+      columns: ["group_id"]
+isOneToOne: false
+      referencedRelation: "groups"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"group_members": {
                   Row: {
                     "first_eligible_date": string | null,"group_id": string,"joined_at": string,"pact_accepted_at": string | null,"role": string,"user_id": string
@@ -98,6 +144,26 @@ isOneToOne: true
                     {
       foreignKeyName: "groups_created_by_fkey"
       columns: ["created_by"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"notification_outbox": {
+                  Row: {
+                    "body": string | null,"channel": string | null,"collapse_key": string | null,"created_at": string,"data": NonNullable<Json>,"error": string | null,"id": number,"kind": string,"sent_at": string | null,"title": string | null,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body"?: string | null,"channel"?: string | null,"collapse_key"?: string | null,"created_at"?: string,"data"?: NonNullable<Json>,"error"?: string | null,"id"?: never,"kind": string,"sent_at"?: string | null,"title"?: string | null,"user_id": string
+                  }
+                  Update: {
+                    "body"?: string | null,"channel"?: string | null,"collapse_key"?: string | null,"created_at"?: string,"data"?: NonNullable<Json>,"error"?: string | null,"id"?: never,"kind"?: string,"sent_at"?: string | null,"title"?: string | null,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notification_outbox_user_id_fkey"
+      columns: ["user_id"]
 isOneToOne: false
       referencedRelation: "profiles"
       referencedColumns: ["id"]
@@ -198,14 +264,40 @@ isOneToOne: false
 "check_in":
 { Args: { "p_local_date": string,"p_note"?: string,"p_source"?: Database["public"]['Enums']["checkin_source"],"p_status": Database["public"]['Enums']["checkin_status"] }; Returns: Json
                            },
+"claim_outbox":
+{ Args: { "p_limit"?: number }; Returns: {
+              "body": string | null,
+"channel": string | null,
+"collapse_key": string | null,
+"created_at": string,
+"data": NonNullable<Json>,
+"error": string | null,
+"id": number,
+"kind": string,
+"sent_at": string | null,
+"title": string | null,
+"user_id": string
+            }[]
+                          SetofOptions: {
+        from: "*"
+        to: "notification_outbox"
+        isOneToOne: false
+        isSetofReturn: true
+      } },
 "create_group":
 { Args: { "p_name": string,"p_timezone"?: string }; Returns: Json
                            },
 "get_home":
 { Args: Record<PropertyKey, never>; Returns: Json
                            },
+"get_widget_snapshot":
+{ Args: Record<PropertyKey, never>; Returns: Json
+                           },
 "join_group":
 { Args: { "p_invite_code": string }; Returns: Json
+                           },
+"register_device":
+{ Args: { "p_platform": string,"p_token": string }; Returns: Json
                            },
 "set_vacation":
 { Args: { "p_end": string,"p_start": string }; Returns: Json

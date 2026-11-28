@@ -2,12 +2,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { supabase } from '@/lib/supabase';
 import type { LocalDate } from '@/shared/dates';
+import { refreshWidgets } from '@/widget/refresh';
 
 import type { CheckinStatus } from '../home/types';
 
 function useRefreshAfterCheckin() {
   const qc = useQueryClient();
-  return () => Promise.all([qc.invalidateQueries({ queryKey: ['home'] }), qc.invalidateQueries({ queryKey: ['history'] })]);
+  return () =>
+    Promise.all([qc.invalidateQueries({ queryKey: ['home'] }), qc.invalidateQueries({ queryKey: ['history'] }), refreshWidgets().catch(() => undefined)]);
 }
 
 export function useCheckIn() {
