@@ -195,6 +195,9 @@ export const copy = {
     pickerLeaderboardDescription: 'Live leaderboard, streaks and one-tap check-in.',
     pickerMini: "Lockin' In me",
     pickerMiniDescription: 'Your streak, position and check-in.',
+    calendarTitle: (clean: number, month: string) => `${clean} clean in ${month}`,
+    calendarEmpty: 'Your history shows up here',
+    dayStreak: 'day streak',
   },
 
   leaderboard: {

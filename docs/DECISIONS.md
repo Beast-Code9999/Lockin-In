@@ -2,6 +2,22 @@
 
 Choices made where SPEC.md was silent or ambiguous, or where a later instruction overrides it. Newest milestone on top.
 
+## Widget pack (added after M4, requested by the crew)
+
+- **Three new widgets**, alongside the SPEC's crew board and mini:
+  - **Button (1×1):** a round lock-in button.
+  - **Calendar (resizable, 4×1 → 4×3 and up):** your history, like the History tab.
+  - **Streak (2×2):** a big flame, rank, XP to the next rank and a check-in pill.
+- **The button keeps the two-tap confirm** (SPEC §12.7): tap → "Sure?" → tap. A one-tap check-in from the home screen would be too easy to hit by accident, and a wrong clean check-in can't be undone. The confirm state is shared, so every widget shows it at once.
+- **The calendar is one `SvgWidget`.** A year of days as separate `FlexWidget`s would be over 700 RemoteViews, which risks Android's widget size limit. The grid, layout and SVG are pure functions (`src/widget/calendar.ts`, unit-tested) sized from the widget's real dimensions:
+  - At 4×1 (under 110dp) it's a compact heatmap with no header or numbers.
+  - Bigger sizes add a header ("22 clean in Nov · 🔥 5"), month labels, date numbers and weekday labels.
+  - The columns are weeks, Monday first, ending with this week.
+- **History comes with the widget snapshot.** `get_widget_snapshot` gains `history`: one character per local day for `WIDGET_HISTORY_DAYS` (371 = 53 weeks), plus the Pact date. It's about 400 bytes, so the calendar renders offline from the cache like everything else.
+  - Today and yesterday without a check-in show as "open" (outlined).
+  - Older days with no record, before the finaliser has run, show as empty. Days before the Pact are dimmed.
+- **Colours match the History tab:** slips are red there too. The SPEC's honesty rule is about shame mechanics (clown, box and so on), which a personal calendar doesn't use.
+
 ## M4 — Notifications
 
 - **One queue function.** Everything that notifies calls `app.notify()`:

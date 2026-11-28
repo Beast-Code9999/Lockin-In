@@ -45,6 +45,8 @@ export type WidgetSnapshot = {
   rival: { text: string } | null;
   activeSos: { id: string; uid: string; name: string; endsAt: string } | null;
   lastEvent: { text: string; at: string } | null;
+  /** Your last WIDGET_HISTORY_DAYS days, one char per day (see calendar.ts). Absent in older caches. */
+  history?: { from: string; firstEligible: string | null; days: string } | null;
 };
 
 export const SNAPSHOT_KEY = 'widget_snapshot_v1';

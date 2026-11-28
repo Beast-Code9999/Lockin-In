@@ -13,6 +13,22 @@ const CREW: RawMember[] = [
   { uid: 'ken', name: 'Ken', avatarId: 'ace', score30d: 301, seasonPoints: 120, streak: 6, flameTier: 1, rank: 'Grinder', todayStatus: 'pending', position: 3 },
 ];
 
+/** ~4 months of mostly-clean history ending on 2026-12-10, with one of everything. */
+function fixtureHistory(): NonNullable<WidgetSnapshot['history']> {
+  const from = '2025-12-05'; // WIDGET_HISTORY_DAYS (371) back from 2026-12-10
+  const pactIndex = 240; // ≈ 2026-08-02
+  const days = Array.from({ length: 371 }, (_, i) => {
+    if (i < pactIndex) return '-';
+    if (i >= 369) return '-'; // yesterday + today still open
+    if (i % 23 === 0) return 's';
+    if (i === 300) return 'm';
+    if (i === 301 || i === 333) return 'f';
+    if (i >= 310 && i <= 314) return 'v';
+    return 'c';
+  }).join('');
+  return { from, firstEligible: '2026-08-02', days };
+}
+
 function make(opts: { crew?: RawMember[]; me?: Partial<WidgetSnapshot['me']>; extra?: Partial<Omit<WidgetSnapshot, 'members' | 'me'>> } = {}): WidgetSnapshot {
   return enrichSnapshot(
     {
@@ -34,6 +50,7 @@ function make(opts: { crew?: RawMember[]; me?: Partial<WidgetSnapshot['me']>; ex
       rival: { text: '14 pts to catch Miguel 🎯' },
       activeSos: null,
       lastEvent: { text: 'Ken checked in 20m ago', at: new Date().toISOString() },
+      history: fixtureHistory(),
       ...opts.extra,
     },
     'Australia/Darwin',

@@ -5,11 +5,14 @@ import { requestPinWidget, WidgetPreview } from 'react-native-android-widget';
 
 import { BubbleButton, BubbleCard, ChoiceChip, GameText, Screen } from '@/ui';
 import { staleLabel, widgetButton } from '@/widget/buttonState';
+import { ButtonWidget } from '@/widget/ButtonWidget';
+import { CalendarWidget } from '@/widget/CalendarWidget';
 import { WIDGET_SCENARIOS } from '@/widget/fixtures';
 import { LeaderboardWidget } from '@/widget/LeaderboardWidget';
 import { MiniWidget } from '@/widget/MiniWidget';
 import { refreshWidgets, updateWidgets } from '@/widget/refresh';
 import { setDebugOverride } from '@/widget/state';
+import { StreakWidget } from '@/widget/StreakWidget';
 
 /**
  * DEV ONLY (guarded in app/_layout.tsx): Widget Debug screen (CLAUDE.md, SPEC §21 M3).
@@ -51,6 +54,18 @@ export default function WidgetDebugScreen() {
             Mini · 2×1
           </GameText>
           <WidgetPreview renderWidget={() => <MiniWidget snapshot={scenario.snapshot} button={button} />} width={180} height={72} />
+          <GameText variant="caption" tone="muted" uppercase>
+            Button 1×1 · Streak 2×2
+          </GameText>
+          <View style={styles.row}>
+            <WidgetPreview renderWidget={() => <ButtonWidget snapshot={scenario.snapshot} button={button} width={90} height={100} />} width={90} height={100} />
+            <WidgetPreview renderWidget={() => <StreakWidget snapshot={scenario.snapshot} button={button} height={180} />} width={180} height={180} />
+          </View>
+          <GameText variant="caption" tone="muted" uppercase>
+            Calendar · 4×1 and 4×3
+          </GameText>
+          <WidgetPreview renderWidget={() => <CalendarWidget snapshot={scenario.snapshot} width={330} height={60} today={scenario.clock.today} />} width={330} height={60} />
+          <WidgetPreview renderWidget={() => <CalendarWidget snapshot={scenario.snapshot} width={330} height={250} today={scenario.clock.today} />} width={330} height={250} />
         </>
       ) : (
         <GameText tone="muted">Widgets are Android-only.</GameText>
@@ -63,6 +78,9 @@ export default function WidgetDebugScreen() {
         <View style={styles.chips}>
           <BubbleButton label="Add crew board" variant="secondary" size="sm" onPress={() => void requestPinWidget({ widgetName: 'Leaderboard' })} />
           <BubbleButton label="Add mini" variant="secondary" size="sm" onPress={() => void requestPinWidget({ widgetName: 'Mini' })} />
+          <BubbleButton label="Add button" variant="secondary" size="sm" onPress={() => void requestPinWidget({ widgetName: 'Button' })} />
+          <BubbleButton label="Add calendar" variant="secondary" size="sm" onPress={() => void requestPinWidget({ widgetName: 'Calendar' })} />
+          <BubbleButton label="Add streak" variant="secondary" size="sm" onPress={() => void requestPinWidget({ widgetName: 'Streak' })} />
         </View>
         <BubbleButton
           label="Pin to home-screen widget"
@@ -91,5 +109,6 @@ export default function WidgetDebugScreen() {
 const styles = StyleSheet.create({
   top: { flexDirection: 'row', alignItems: 'center', gap: 14 },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  row: { flexDirection: 'row', gap: 12, alignItems: 'flex-start' },
   card: { gap: 10 },
 });
